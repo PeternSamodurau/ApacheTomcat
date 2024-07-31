@@ -12,6 +12,8 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Enumeration;
 
+// Attribute нужен для хранения данных в сессии.
+
 @WebServlet("/session1")
 public class SessionServlet extends HttpServlet {
 
