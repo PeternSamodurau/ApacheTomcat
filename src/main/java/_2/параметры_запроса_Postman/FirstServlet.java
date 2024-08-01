@@ -25,20 +25,39 @@ public class FirstServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        System.out.println("____________________________");
+
         String parValue = req.getParameter("param");
         System.out.println(parValue);
         System.out.println("____________________________");
-        System.out.println(req.getParameterNames().toString());
+
+        String[] parIDs = req.getParameterValues("id");
+        if (parIDs != null) {
+            for (String id : parIDs) {
+                System.out.println(id);
+            }
+        }
+        System.out.println("____________________________");
+
+        Enumeration<String> names = req.getParameterNames();
+        while (names.hasMoreElements()) {
+            String name = names.nextElement();
+            System.out.println(name);
+        }
         System.out.println("____________________________");
 
         Map<String, String[]> parameterMap = req.getParameterMap();
-        System.out.println(parameterMap);
+        for (Map.Entry<String, String[]> entry : parameterMap.entrySet()) {
+            String name = entry.getKey();
+            String[] values = entry.getValue();
+            for (String value : values) {
+                System.out.println(name + ": " + value);
+            }
+        }
         System.out.println("____________________________");
 
-//        resp.setContentType("text/html");
-//        resp.setCharacterEncoding(StandardCharsets.UTF_8.name());
-//        resp.setHeader("token", "12345");
+        resp.setContentType("text/html");
+        resp.setCharacterEncoding(StandardCharsets.UTF_8.name());
+        resp.setHeader("token", "12345");
         try (PrintWriter writer = resp.getWriter()) {
             writer.write("<h1>Hello from first servlet! postman</h1>");
         }
@@ -46,9 +65,14 @@ public class FirstServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        System.out.println("____________________________");
         Map<String, String[]> parameterMap = req.getParameterMap();
-        System.out.println(parameterMap);
+        for (Map.Entry<String, String[]> entry : parameterMap.entrySet()) {
+            String name = entry.getKey();
+            String[] values = entry.getValue();
+            for (String value : values) {
+                System.out.println(name + ": " + value);
+            }
+        }
     }
 
     @Override

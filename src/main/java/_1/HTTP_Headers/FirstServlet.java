@@ -11,8 +11,20 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
+import java.util.Collection;
 import java.util.Enumeration;
-
+// Методы init, doGet, doPost и destroy в сервлете вызываются контейнером сервлетов (например, Tomcat), а не напрямую .
+// Вот как это работает:
+//
+//init: Этот метод вызывается контейнером сервлетов при инициализации сервлета. Это происходит один раз, когда сервлет загружается в память.
+//doGet и doPost: Эти методы вызываются контейнером сервлетов каждый раз,
+// когда сервер получает соответствующий HTTP-запрос (GET или POST) для данного сервлета.
+// Контейнер сервлетов автоматически определяет, какой метод вызывать, основываясь на типе HTTP-запроса.
+//destroy: Этот метод вызывается контейнером сервлетов перед тем, как сервлет будет выгружен из памяти.
+// Это позволяет сервлету выполнить любые необходимые действия по очистке.
+//Контейнер сервлетов управляет жизненным циклом сервлета,
+// обеспечивая вызов этих методов в нужное время.
+// Это позволяет вам сосредоточиться на логике обработки запросов, не беспокоясь о том, когда и как вызывать эти методы.
 @WebServlet("/first")
 public class FirstServlet extends HttpServlet {
 
@@ -32,7 +44,9 @@ public class FirstServlet extends HttpServlet {
         System.out.println("____________________________");
 
         // Выводим заголовки
-        Enumeration<String> headerNames = req.getHeaderNames();
+        System.out.println("Заголовки: content-type" + " "+ req.getHeader("content-type")); //В GET-запросах заголовок Content-Type обычно не используется,
+        // так как GET-запросы не содержат тела запроса. Поэтому заголовок Content-Type может быть null.
+        Enumeration<String> headerNames = req.getHeaderNames();// Enumeration - интерфейс для перечисления значений в коллекции (в данном случае - заголовки)
         while (headerNames.hasMoreElements()) {
             String header = headerNames.nextElement();
             System.out.println("Заголовок: " + header + " " + req.getHeader(header));
@@ -57,7 +71,14 @@ public class FirstServlet extends HttpServlet {
         try (PrintWriter writer = resp.getWriter()) {
             writer.write("<h1>Hello from first servlet!</h1>");
             writer.write("<p>Стартовая строка ответа: " + protocol + "" + method + " " + uri +" " + resp.getStatus() +"</p>");
-            writer.write("<p>Заголовки ответа : " + resp.getHeader("token") + "</p>");
+
+            writer.write("<p>Заголовки ответа : " + resp.getContentType() + "</p>");
+            Collection<String> headerNames1 = resp.getHeaderNames(); // Получаем заголовки ответа
+            for (String header : headerNames1) {
+                writer.write("Заголовок ответа: " + header + " " + resp.getHeader(header)); // Используем resp.getHeader(header)
+                writer.write("<br>");
+            }
+
             writer.write("<p>Тело ответа: " + body.toString() + "</p>");
         }
     }

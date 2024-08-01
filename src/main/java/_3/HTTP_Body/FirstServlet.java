@@ -25,22 +25,9 @@ public class FirstServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        System.out.println("____________________________");
-        String parValue = req.getParameter("param");
-        System.out.println(parValue);
-        System.out.println("____________________________");
-        System.out.println(req.getParameterNames().toString());
-        System.out.println("____________________________");
 
-        Map<String, String[]> parameterMap = req.getParameterMap();
-        System.out.println(parameterMap);
-        System.out.println("____________________________");
-
-//        resp.setContentType("text/html");
-//        resp.setCharacterEncoding(StandardCharsets.UTF_8.name());
-//        resp.setHeader("token", "12345");
         try (PrintWriter writer = resp.getWriter()) {
-            writer.write("<h1>Hello from first servlet! postman</h1>");
+            writer.write("<h1>Hello from third servlet! postman</h1>");
         }
     }
 
